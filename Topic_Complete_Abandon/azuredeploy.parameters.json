@@ -5,7 +5,7 @@
         "logicappname": {
             "value": null
         },
-        "servicebusapiconnection": {
+        "servicebusconnection": {
             "value": null
         },
         "servicebustopic":{

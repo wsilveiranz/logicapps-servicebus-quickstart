@@ -6,7 +6,7 @@
             "defaultValue": "ServiceBusTopicCompleteAbandon",
             "type": "String"
         },
-        "servicebusapiconnection": {
+        "servicebusconnection": {
             "defaultValue": null,
             "type": "String"
         },
@@ -131,9 +131,9 @@
                     "$connections": {
                         "value": {
                             "servicebus": {
-                                "connectionId": "[parameters('servicebusapiconnection')]",
-                                "connectionName": "servicebus",
-                                "id": null
+                                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('servicebusconnection'))]",
+                                "connectionName": "[parameters('sqlConnectionName')]",
+                                "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/servicebus')]"
                             }
                         }
                     }
