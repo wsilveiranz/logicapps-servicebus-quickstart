@@ -1,0 +1,146 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "logicappname": {
+            "defaultValue": "ServiceBusTopicCompleteAbandon",
+            "type": "String"
+        },
+        "servicebusapiconnection": {
+            "defaultValue": "",
+            "type": "String"
+        },
+        "servicebustopic":{
+            "defaultValue": "",
+            "type": "String"
+        },
+        "servicebussubscription":{
+            "defaultValue": "",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/3757a698-fca4-44ba-aaf5-6fb8d4bd62b1/resourceGroups/ServiceBusResearch/providers/Microsoft.Logic/workflows/ServiceBusTopicCompleteAbandon'.",
+            "type": "Microsoft.Logic/workflows",
+            "name": "[parameters('logicappname')]",
+            "apiVersion": "2016-06-01",
+            "location": "australiasoutheast",
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        },
+                        "$subscriptionname": {
+                            "defaultValue": "[parameters('servicebustopic')]",
+                            "type": "String"
+                        },
+                        "$topicname": {
+                            "defaultValue": "[parameters('servicebustsubscription')]",
+                            "type": "String"
+                        }
+                    },
+                    "triggers": {
+                        "When_a_message_is_received_in_a_topic_subscription_(peek-lock)": {
+                            "recurrence": {
+                                "frequency": "Minute",
+                                "interval": 3
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "api": {
+                                        "runtimeUrl": "https://logic-apis-australiasoutheast.azure-apim.net/apim/servicebus"
+                                    },
+                                    "connection": {
+                                        "name": "@parameters('$connections')['servicebus']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/@{encodeURIComponent(parameters('$topicname'))}/subscriptions/@{encodeURIComponent(parameters('$subscriptionname'))}/messages/head/peek",
+                                "queries": {
+                                    "subscriptionType": "Main"
+                                }
+                            }
+                        }
+                    },
+                    "actions": {
+                        "Abandon_the_message_in_a_topic_subscription": {
+                            "runAfter": {
+                                "Scope": [
+                                    "Failed"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "api": {
+                                        "runtimeUrl": "https://logic-apis-australiasoutheast.azure-apim.net/apim/servicebus"
+                                    },
+                                    "connection": {
+                                        "name": "@parameters('$connections')['servicebus']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/@{encodeURIComponent(parameters('$topicname'))}/subscriptions/@{encodeURIComponent(parameters('$subscriptionname'))}/messages/abandon",
+                                "queries": {
+                                    "lockToken": "@{triggerBody()?['LockToken']}",
+                                    "subscriptionType": "Main"
+                                }
+                            }
+                        },
+                        "Complete_the_message_in_a_topic_subscription": {
+                            "runAfter": {
+                                "Scope": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "api": {
+                                        "runtimeUrl": "https://logic-apis-australiasoutheast.azure-apim.net/apim/servicebus"
+                                    },
+                                    "connection": {
+                                        "name": "@parameters('$connections')['servicebus']['connectionId']"
+                                    }
+                                },
+                                "method": "delete",
+                                "path": "/@{encodeURIComponent(parameters('$topicname'))}/subscriptions/@{encodeURIComponent(parameters('$subscriptionname'))}/messages/complete",
+                                "queries": {
+                                    "lockToken": "@{triggerBody()?['LockToken']}",
+                                    "subscriptionType": "Main"
+                                }
+                            }
+                        },
+                        "Scope": {
+                            "actions": {},
+                            "runAfter": {},
+                            "type": "Scope"
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "servicebus": {
+                                "connectionId": "[parameters('servicebusapiconnection')]",
+                                "connectionName": "servicebus",
+                                "id": "/subscriptions/3757a698-fca4-44ba-aaf5-6fb8d4bd62b1/providers/Microsoft.Web/locations/australiasoutheast/managedApis/servicebus"
+                            }
+                        }
+                    }
+                }
+            },
+            "resources": [],
+            "dependsOn": []
+        }
+    ]
+}

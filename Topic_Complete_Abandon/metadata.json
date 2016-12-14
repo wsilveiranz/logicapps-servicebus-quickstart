@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Service Bus - Peek Lock with complete/abandon",
+  "description": "Creates a new Service Bus Logic App using the Peek-Lock / Complete / Abandon Pattern.",
+  "summary": "Creates a new Service Bus Logic App using the Peek-Lock / Complete / Abandon Pattern. Logic App template with empty parameters document",
+  "githubUsername": "wsilveiranz",
+  "dateUpdated": "2016-12-14"
+}
