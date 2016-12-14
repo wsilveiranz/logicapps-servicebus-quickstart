@@ -42,7 +42,7 @@
                             "type": "String"
                         },
                         "$topicname": {
-                            "defaultValue": "[parameters('servicebustsubscription')]",
+                            "defaultValue": "[parameters('servicebussubscription')]",
                             "type": "String"
                         }
                     },
