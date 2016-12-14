@@ -132,7 +132,7 @@
                         "value": {
                             "servicebus": {
                                 "connectionId": "[resourceId('Microsoft.Web/connections', parameters('servicebusconnection'))]",
-                                "connectionName": "[parameters('sqlConnectionName')]",
+                                "connectionName": "[parameters('servicebusconnection')]",
                                 "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/servicebus')]"
                             }
                         }
