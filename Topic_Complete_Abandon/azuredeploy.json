@@ -7,7 +7,7 @@
             "type": "String"
         },
         "servicebusapiconnection": {
-            "defaultValue": "",
+            "defaultValue": null,
             "type": "String"
         },
         "servicebustopic":{
@@ -133,7 +133,7 @@
                             "servicebus": {
                                 "connectionId": "[parameters('servicebusapiconnection')]",
                                 "connectionName": "servicebus",
-                                "id": "/subscriptions/3757a698-fca4-44ba-aaf5-6fb8d4bd62b1/providers/Microsoft.Web/locations/australiasoutheast/managedApis/servicebus"
+                                "id": null
                             }
                         }
                     }
