@@ -6,7 +6,11 @@
             "defaultValue": "ServiceBusTopicCompleteAbandon",
             "type": "String"
         },
-        "servicebusconnection": {
+        "servicebusconnectionname":{
+            "defaultValue": "servicebus",
+            "type": "String"
+        },
+        "servicebusConnString": {
             "defaultValue": null,
             "type": "String"
         },
@@ -22,7 +26,22 @@
     "variables": {},
     "resources": [
         {
-            "comments": "Generalized from resource: '/subscriptions/3757a698-fca4-44ba-aaf5-6fb8d4bd62b1/resourceGroups/ServiceBusResearch/providers/Microsoft.Logic/workflows/ServiceBusTopicCompleteAbandon'.",
+      "type": "Microsoft.Web/connections",
+      "apiVersion": "2016-06-01",
+      "location": "[resourceGroup().location]",
+      "name": "[parameters('servicebusconnectionname')]",
+      "properties": {
+        "api": {
+          "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/sql')]"
+        },
+        "displayName": "servicebus_TopicCompleteAbandon",
+        "parameterValues": {
+          "connectionString": "[parameters('servicebusConnString')]"
+        }
+      }
+    },
+        {
+            "comments": "Template for Logic Apps Using Topics with Complete on success and abandon on failure.",
             "type": "Microsoft.Logic/workflows",
             "name": "[parameters('logicappname')]",
             "apiVersion": "2016-06-01",
@@ -131,8 +150,8 @@
                     "$connections": {
                         "value": {
                             "servicebus": {
-                                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('servicebusconnection'))]",
-                                "connectionName": "[parameters('servicebusconnection')]",
+                                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('servicebusconnectionname'))]",
+                                "connectionName": "[parameters('servicebusconnectionname')]",
                                 "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/servicebus')]"
                             }
                         }
