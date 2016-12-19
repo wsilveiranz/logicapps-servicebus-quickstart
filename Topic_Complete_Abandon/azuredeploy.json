@@ -32,7 +32,7 @@
       "name": "[parameters('servicebusconnectionname')]",
       "properties": {
         "api": {
-          "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/sql')]"
+          "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/servicebus')]"
         },
         "displayName": "servicebus_TopicCompleteAbandon",
         "parameterValues": {
